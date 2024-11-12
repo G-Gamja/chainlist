@@ -9,6 +9,12 @@
     "bech_validator_prefix" : "mantlevaloper",
     "origin_genesis_time" : "2022-04-18T12:00:00Z",
     "api_name" : "asset-mantle",
+    "is_support_mintscan": true,
+    "is_support_mobile_wallet" : true,
+    "is_support_extension_wallet" : true,
+    "chain_type": [
+        "cosmos"
+    ],
     "account_type" : [
         {
             "hd_path": "m/44'/118'/0'/0/X",
@@ -16,7 +22,7 @@
             "pubkey_type": "/cosmos.crypto.secp256k1.PubKey"
         }
     ],
-    "cosmos_fee" : {
+    "cosmos_fee_info" : {
         "base" : "0",
         "rate" : [
             "0.0umntl",

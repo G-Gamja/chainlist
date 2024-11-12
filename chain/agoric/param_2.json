@@ -9,6 +9,7 @@
     "bech_validator_prefix" : "agoricvaloper",
     "origin_genesis_time" : "2022-07-01T00:00:00Z",
     "api_name" : "agoric",
+    "is_support_mintscan": true,
     "account_type" : [
         {
             "hd_path": "m/44'/564'/0'/0/X",
@@ -22,7 +23,7 @@
             "pubkey_type": "/cosmos.crypto.secp256k1.PubKey"
         }
     ],
-    "cosmos_fee" : {
+    "cosmos_fee_info" : {
         "base" : "1",
         "rate" : [
             "0.03ubld,0.0034uist",

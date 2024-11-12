@@ -9,6 +9,13 @@
     "bech_validator_prefix" : "chihuahuavaloper",
     "origin_genesis_time" : "2021-12-14T12:14:12Z",
     "api_name" : "chihuahua",
+    "is_support_cw20" : true,
+    "is_support_mintscan": true,
+    "is_support_mobile_wallet" : true,
+    "is_support_extension_wallet" : true,
+    "chain_type": [
+        "cosmos"
+    ],
     "account_type" : [
         {
             "hd_path": "m/44'/118'/0'/0/X",
@@ -16,7 +23,7 @@
             "pubkey_type": "/cosmos.crypto.secp256k1.PubKey"
         }
     ],
-    "cosmos_fee" : {
+    "cosmos_fee_info" : {
         "base" : "0",
         "rate" : [
             "500uhuahua",
