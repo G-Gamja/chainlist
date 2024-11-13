@@ -43,15 +43,6 @@ async function main() {
 
     const coinGeckoIdsjsonResponse = await coinGeckoResponse.json();
 
-    console.log(
-      "🚀 ~ main ~ coinGeckoIdsjsonResponse:",
-      coinGeckoIdsjsonResponse
-    );
-
-    const coinGeckoIdsResponse = coinGeckoIdsjsonResponse.data;
-
-    console.log("🚀 ~ main ~ coinGeckoIdsResponse:", coinGeckoIdsResponse);
-
     const coinGeckoIdsKeyMap = {
       ethereum: "ethereum",
       fantom: "fantom",
@@ -88,7 +79,7 @@ async function main() {
       return asset.contract.toLowerCase();
     });
 
-    const 필터링된코인게코리스폰스 = coinGeckoIdsResponse.filter(
+    const 필터링된코인게코리스폰스 = coinGeckoIdsjsonResponse.filter(
       (item) => !!item.platforms[keyId]
     );
 
