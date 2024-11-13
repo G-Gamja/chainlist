@@ -86,11 +86,6 @@ async function main() {
       (item) => !!item.platforms[keyId]
     );
 
-    console.log(
-      "🚀 ~ main ~ 필터링된코인게코리스폰스:",
-      필터링된코인게코리스폰스
-    );
-
     const assetsToAdd = erc20Assets
       .filter((asset) => {
         return (
@@ -110,6 +105,8 @@ async function main() {
             );
           })?.id || "";
 
+        console.log("🚀 ~ main ~ coinGeckoId", coinGeckoId);
+
         return {
           type: "erc20",
           contract: asset.tokenContractAddress,
@@ -126,8 +123,6 @@ async function main() {
       });
 
     const mergedAssets = [...currentAssets, ...assetsToAdd];
-
-    console.log("🚀 ~ main ~ mergedAssets:", mergedAssets);
 
     writeFileSync(fileName, JSON.stringify(mergedAssets, null, 2));
 
