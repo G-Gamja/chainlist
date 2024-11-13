@@ -98,14 +98,14 @@ async function main() {
       })
       .map((asset) => {
         const coinGeckoId =
-          필터링된코인게코리스폰스.find((item) => {
-            return isEqualsIgnoringCase(
+          필터링된코인게코리스폰스.find((item) =>
+            isEqualsIgnoringCase(
               item.platforms[keyId],
               asset.tokenContractAddress
-            );
-          })?.id || "";
+            )
+          )?.id || "";
 
-        console.log("🚀 ~ main ~ coinGeckoId", coinGeckoId);
+        console.log("🚀 ~ main ~ coinGeckoId", coinGeckoId || "없음요");
 
         return {
           type: "erc20",
