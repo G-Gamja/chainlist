@@ -47,7 +47,7 @@ async function main() {
       ethereum: "ethereum",
       fantom: "fantom",
       polygon: "polygon",
-      "binance-smart-chain": "bnb-smart-chain",
+      "bnb-smart-chain": "binance-smart-chain",
       cronos: "cronos",
     };
 
