@@ -48,6 +48,7 @@ async function main() {
       fantom: "fantom",
       polygon: "polygon",
       "binance-smart-chain": "bnb-smart-chain",
+      cronos: "cronos",
     };
 
     const keyId = coinGeckoIdsKeyMap[chain];
