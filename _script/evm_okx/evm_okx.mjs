@@ -52,6 +52,8 @@ async function main() {
 
     const keyId = coinGeckoIdsKeyMap[chain];
 
+    console.log("🚀 ~ main ~ keyId:", keyId);
+
     const response = await fetch(
       `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
       {
@@ -81,6 +83,11 @@ async function main() {
 
     const 필터링된코인게코리스폰스 = coinGeckoIdsjsonResponse.filter(
       (item) => !!item.platforms[keyId]
+    );
+
+    console.log(
+      "🚀 ~ main ~ 필터링된코인게코리스폰스:",
+      필터링된코인게코리스폰스
     );
 
     const assetsToAdd = erc20Assets
