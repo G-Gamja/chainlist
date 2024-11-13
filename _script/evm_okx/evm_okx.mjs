@@ -32,7 +32,7 @@ async function main() {
     const fileName = `./chain/${chain}/erc20_2.json`;
     const currentAssets = JSON.parse(readFileSync(fileName, "utf-8"));
 
-    const coinGeckoIds = await fetch(
+    const coinGeckoResponse = await fetch(
       `https://api.coingecko.com/api/v3/coins/list?include_platform=true&status=active`,
       {
         headers: {
@@ -40,6 +40,17 @@ async function main() {
         },
       }
     );
+
+    const coinGeckoIdsjsonResponse = await coinGeckoResponse.json();
+
+    console.log(
+      "🚀 ~ main ~ coinGeckoIdsjsonResponse:",
+      coinGeckoIdsjsonResponse
+    );
+
+    const coinGeckoIdsResponse = coinGeckoIdsjsonResponse.data;
+
+    console.log("🚀 ~ main ~ coinGeckoIdsResponse:", coinGeckoIdsResponse);
 
     const coinGeckoIdsKeyMap = {
       ethereum: "ethereum",
@@ -77,7 +88,7 @@ async function main() {
       return asset.contract.toLowerCase();
     });
 
-    const 필터링된코인게코리스폰스 = coinGeckoIds.filter(
+    const 필터링된코인게코리스폰스 = coinGeckoIdsResponse.filter(
       (item) => !!item.platforms[keyId]
     );
 
