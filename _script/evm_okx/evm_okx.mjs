@@ -3,11 +3,20 @@ import cryptoJS from "crypto-js";
 
 const nativeCoinContractAddress = "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE";
 
+function isEqualsIgnoringCase(a, b) {
+  return (
+    typeof a === "string" &&
+    typeof b === "string" &&
+    a.toLowerCase() === b.toLowerCase()
+  );
+}
+
 async function main() {
   try {
     const apiKey = process.env.OKX_API_KEY;
     const secretKey = process.env.OKX_SECRET_KEY;
     const passphrase = process.env.OKX_PASSPHRASE;
+    const coinGeckoApiKey = process.env.COINGECKO_API_KEY;
 
     const date = new Date();
     const timestamp = date.toISOString();
@@ -22,6 +31,24 @@ async function main() {
 
     const fileName = `./chain/${chain}/erc20_2.json`;
     const currentAssets = JSON.parse(readFileSync(fileName, "utf-8"));
+
+    const coinGeckoIds = await fetch(
+      `https://api.coingecko.com/api/v3/coins/list?include_platform=true&status=active`,
+      {
+        headers: {
+          "x-cg-pro-api-key": coinGeckoApiKey,
+        },
+      }
+    );
+
+    const coinGeckoIdsKeyMap = {
+      ethereum: "ethereum",
+      fantom: "fantom",
+      polygon: "polygon",
+      "binance-smart-chain": "bnb-smart-chain",
+    };
+
+    const keyId = coinGeckoIdsKeyMap[chain];
 
     const response = await fetch(
       `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
@@ -50,6 +77,10 @@ async function main() {
       return asset.contract.toLowerCase();
     });
 
+    const 필터링된코인게코리스폰스 = coinGeckoIds.filter(
+      (item) => !!item.platforms[keyId]
+    );
+
     const assetsToAdd = erc20Assets
       .filter((asset) => {
         return (
@@ -60,19 +91,29 @@ async function main() {
             nativeCoinContractAddress.toLowerCase()
         );
       })
-      .map((asset) => ({
-        type: "erc20",
-        contract: asset.tokenContractAddress,
-        name: asset.tokenName,
-        symbol: asset.tokenSymbol,
-        description: asset.tokenSymbol, // NOTE: Temporary
-        decimals:
-          typeof asset.decimals === "string"
-            ? Number(asset.decimals)
-            : asset.decimals,
-        image: asset?.tokenLogoUrl,
-        coinGeckoId: asset?.coingeckoId || "",
-      }));
+      .map((asset) => {
+        const coinGeckoId =
+          필터링된코인게코리스폰스.find((item) => {
+            return isEqualsIgnoringCase(
+              item.platforms[keyId],
+              asset.tokenContractAddress
+            );
+          })?.id || "";
+
+        return {
+          type: "erc20",
+          contract: asset.tokenContractAddress,
+          name: asset.tokenName,
+          symbol: asset.tokenSymbol,
+          description: asset.tokenSymbol, // NOTE: Temporary
+          decimals:
+            typeof asset.decimals === "string"
+              ? Number(asset.decimals)
+              : asset.decimals,
+          image: asset?.tokenLogoUrl,
+          coinGeckoId: asset?.coingeckoId || coinGeckoId || "",
+        };
+      });
 
     const mergedAssets = [...currentAssets, ...assetsToAdd];
 
