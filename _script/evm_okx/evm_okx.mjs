@@ -81,24 +81,10 @@ async function main() {
     // NOTE chain_identifier only supports EVM chainids
     const coingeckoChainKey = assetPlatformsData.find(
       (item) => String(item.chain_identifier) === String(chainId)
-    );
-
-    console.log("🚀 ~ main ~ chainId:", chainId);
-    console.log("🚀 ~ main ~ chainId type:", typeof chainId);
-    console.log("🚀 ~ main ~ coingeckoChainKey:", coingeckoChainKey);
-
-    // const chainListApiNameToCoinGeckoChainNameMaps = {
-    //   ethereum: "ethereum",
-    //   fantom: "fantom",
-    //   polygon: "polygon",
-    //   "bnb-smart-chain": "binance-smart-chain",
-    //   cronos: "cronos",
-    // };
-
-    // const coingeckoChainKey = chainListApiNameToCoinGeckoChainNameMaps[chain];
+    ).id;
 
     const filteredCoinGeckoIdsByChain = activeGeckoCoinsDataResponse.filter(
-      (item) => !!item.platforms[coingeckoChainKey.id]
+      (item) => !!item.platforms[coingeckoChainKey]
     );
 
     const response = await fetch(
@@ -167,7 +153,7 @@ async function main() {
       });
 
     const newCoinGeckoIds = assetsToAdd.map((item) => {
-      if (item.coinGeckoId !== "" || !!item.coinGeckoId) {
+      if (item.coinGeckoId !== "" || item.coinGeckoId !== undefined) {
         return item.coinGeckoId;
       }
     });
