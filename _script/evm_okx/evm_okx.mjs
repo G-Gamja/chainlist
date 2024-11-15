@@ -67,24 +67,7 @@ async function main() {
       )
     ).flat();
 
-    // settimeout을 걸어 7초뒤에 요청하도록 수정
-
-    // let assetPlatformsData = [];
-    // setTimeout(async () => {
-    //   const assetPlatformsResponse = await fetch(
-    //     `https://api.coingecko.com/api/v3/asset_platforms`,
-    //     {
-    //       headers: {
-    //         "x-cg-pro-api-key": coinGeckoApiKey,
-    //       },
-    //     }
-    //   );
-
-    //   const assetPlatformsResponseData = await assetPlatformsResponse.json();
-
-    //   assetPlatformsData = assetPlatformsResponseData;
-    // }, 7000); // 7000밀리초 = 7초
-
+    console.log("Intentionally waiting for 31 seconds for avoiding rate limit");
     const fetchAssetPlatformsData = () => {
       return new Promise((resolve) => {
         setTimeout(async () => {
@@ -99,26 +82,21 @@ async function main() {
 
           const assetPlatformsResponseData =
             await assetPlatformsResponse.json();
-          console.log(
-            "🚀 ~ setTimeout ~ assetPlatformsResponseData:",
-            assetPlatformsResponseData
-          );
+
           resolve(assetPlatformsResponseData);
-        }, 31000); // 7000밀리초 = 7초
+        }, 31000);
       });
     };
 
     const assetPlatformsData = await fetchAssetPlatformsData();
 
-    console.log("🚀 ~ main ~ assetPlatformsData:", assetPlatformsData);
-
     // NOTE chain_identifier only supports EVM chainids
-    const coingeckoChainKey = assetPlatformsData.find(
+    const assetPlatformId = assetPlatformsData.find(
       (item) => String(item.chain_identifier) === String(chainId)
     ).id;
 
     const filteredCoinGeckoIdsByChain = activeGeckoCoinsDataResponse.filter(
-      (item) => !!item.platforms[coingeckoChainKey]
+      (item) => !!item.platforms[assetPlatformId]
     );
 
     const response = await fetch(
@@ -163,12 +141,10 @@ async function main() {
           filteredCoinGeckoIdsByChain.find(
             (item) =>
               isEqualsIgnoringCase(
-                item.platforms[coingeckoChainKey],
+                item.platforms[assetPlatformId],
                 asset.tokenContractAddress
               ) && top1000CoinGeckoIds.includes(item.id)
           )?.id || "";
-
-        console.log(coinGeckoId);
 
         return {
           type: "erc20",
@@ -188,7 +164,9 @@ async function main() {
     const newCoinGeckoIds = assetsToAdd
       .filter((item) => !!item.coinGeckoId)
       .map((item) => item.coinGeckoId);
-    console.log("🚀 ~ newCoinGeckoIds ~ newCoinGeckoIds:", newCoinGeckoIds);
+
+    console.log("Coin ID List for comparison");
+    console.log("🚀 ~ newCoinGeckoIds:", JSON.stringify(newCoinGeckoIds));
 
     // const response = await fetch('https://front.api.mintscan.io/v10/utils/market/register', {
     //   method: 'POST', // HTTP 메서드를 POST로 설정
