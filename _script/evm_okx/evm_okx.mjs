@@ -32,7 +32,7 @@ async function main() {
     const fileName = `./chain/${chain}/erc20_2.json`;
     const currentAssets = JSON.parse(readFileSync(fileName, "utf-8"));
 
-    const coinGeckoResponse = await fetch(
+    const coingeckoActiveCoinsData = await fetch(
       `https://api.coingecko.com/api/v3/coins/list?include_platform=true&status=active`,
       {
         headers: {
@@ -41,9 +41,33 @@ async function main() {
       }
     );
 
-    const coinGeckoIdsjsonResponse = await coinGeckoResponse.json();
+    const activeGeckoCoinsDataResponse = await coingeckoActiveCoinsData.json();
 
-    const coinGeckoIdsKeyMap = {
+    const pageList = [1, 2, 3, 4];
+    const top1000CoinGeckoIds = (
+      await Promise.all(
+        pageList.map(async (pageIndex) => {
+          try {
+            const response = await fetch(
+              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
+              {
+                headers: {
+                  "x-cg-pro-api-key": "CG-ERj4mPRs3YjeC2vpoMZcZUjt",
+                },
+              }
+            );
+
+            const result = await response.json();
+
+            return result.map((item) => item.id);
+          } catch (e) {
+            throw e;
+          }
+        })
+      )
+    ).flat();
+
+    const chainListApiNameToCoinGeckoChainNameMaps = {
       ethereum: "ethereum",
       fantom: "fantom",
       polygon: "polygon",
@@ -51,9 +75,11 @@ async function main() {
       cronos: "cronos",
     };
 
-    const keyId = coinGeckoIdsKeyMap[chain];
+    const coingeckoChainKey = chainListApiNameToCoinGeckoChainNameMaps[chain];
 
-    console.log("🚀 ~ main ~ keyId:", keyId);
+    const filteredCoinGeckoIdsByChain = activeGeckoCoinsDataResponse.filter(
+      (item) => !!item.platforms[coingeckoChainKey]
+    );
 
     const response = await fetch(
       `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
@@ -82,10 +108,6 @@ async function main() {
       return asset.contract.toLowerCase();
     });
 
-    const 필터링된코인게코리스폰스 = coinGeckoIdsjsonResponse.filter(
-      (item) => !!item.platforms[keyId]
-    );
-
     const assetsToAdd = erc20Assets
       .filter((asset) => {
         return (
@@ -98,14 +120,12 @@ async function main() {
       })
       .map((asset) => {
         const coinGeckoId =
-          필터링된코인게코리스폰스.find((item) =>
+          filteredCoinGeckoIdsByChain.find((item) =>
             isEqualsIgnoringCase(
-              item.platforms[keyId],
+              item.platforms[coingeckoChainKey],
               asset.tokenContractAddress
             )
           )?.id || "";
-
-        console.log("🚀 ~ main ~ coinGeckoId", coinGeckoId || "없음요");
 
         return {
           type: "erc20",
@@ -118,13 +138,32 @@ async function main() {
               ? Number(asset.decimals)
               : asset.decimals,
           image: asset?.tokenLogoUrl,
-          coinGeckoId: asset?.coingeckoId || coinGeckoId || "",
+          coinGeckoId: coinGeckoId || "",
         };
       });
 
-    const mergedAssets = [...currentAssets, ...assetsToAdd];
+    const newCoinGeckoIds = assetsToAdd.map((item) => {
+      if (item.coinGeckoId !== "") {
+        return item.coinGeckoId;
+      }
+    });
+    console.log("🚀 ~ newCoinGeckoIds ~ newCoinGeckoIds:", newCoinGeckoIds);
 
-    console.log("🚀 ~ main ~ mergedAssets:", mergedAssets);
+    // https://front.api.mintscan.io/v10/utils/market/register
+    // post logic
+
+    // const response = await fetch(
+    //   "https://front.api.mintscan.io/v10/utils/market/register",
+    //   {
+    //     method: "POST", // HTTP 메서드를 POST로 설정
+    //     headers: {
+    //       "x-authorization": "application/json", // 요청 헤더 설정
+    //     },
+    //     body: JSON.stringify({ coingecko_id: ["id1", "id2", "id3"] }), // 요청 본문 설정
+    //   }
+    // );
+
+    const mergedAssets = [...currentAssets, ...assetsToAdd];
 
     writeFileSync(fileName, JSON.stringify(mergedAssets, null, 2));
 
