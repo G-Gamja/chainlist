@@ -104,7 +104,7 @@ async function main() {
             assetPlatformsResponseData
           );
           resolve(assetPlatformsResponseData);
-        }, 7000); // 7000밀리초 = 7초
+        }, 31000); // 7000밀리초 = 7초
       });
     };
 
