@@ -67,17 +67,32 @@ async function main() {
       )
     ).flat();
 
-    console.log("🚀 ~ main ~ top1000CoinGeckoIds:", top1000CoinGeckoIds);
+    const assetPlatformsResponse = await fetch(
+      `https://api.coingecko.com/api/v3/asset_platforms`,
+      {
+        headers: {
+          "x-cg-pro-api-key": coinGeckoApiKey,
+        },
+      }
+    );
 
-    const chainListApiNameToCoinGeckoChainNameMaps = {
-      ethereum: "ethereum",
-      fantom: "fantom",
-      polygon: "polygon",
-      "bnb-smart-chain": "binance-smart-chain",
-      cronos: "cronos",
-    };
+    const assetPlatformsData = await assetPlatformsResponse.json();
 
-    const coingeckoChainKey = chainListApiNameToCoinGeckoChainNameMaps[chain];
+    const coingeckoChainKey = assetPlatformsData.find(
+      (item) => item.chain_identifier === chainId
+    );
+
+    console.log("🚀 ~ main ~ coingeckoChainKey:", coingeckoChainKey);
+
+    // const chainListApiNameToCoinGeckoChainNameMaps = {
+    //   ethereum: "ethereum",
+    //   fantom: "fantom",
+    //   polygon: "polygon",
+    //   "bnb-smart-chain": "binance-smart-chain",
+    //   cronos: "cronos",
+    // };
+
+    // const coingeckoChainKey = chainListApiNameToCoinGeckoChainNameMaps[chain];
 
     const filteredCoinGeckoIdsByChain = activeGeckoCoinsDataResponse.filter(
       (item) => !!item.platforms[coingeckoChainKey]
@@ -122,12 +137,15 @@ async function main() {
       })
       .map((asset) => {
         const coinGeckoId =
-          filteredCoinGeckoIdsByChain.find((item) =>
-            isEqualsIgnoringCase(
-              item.platforms[coingeckoChainKey],
-              asset.tokenContractAddress
-            )
+          filteredCoinGeckoIdsByChain.find(
+            (item) =>
+              isEqualsIgnoringCase(
+                item.platforms[coingeckoChainKey],
+                asset.tokenContractAddress
+              ) && top1000CoinGeckoIds.includes(item.id)
           )?.id || "";
+
+        console.log(coinGeckoId);
 
         return {
           type: "erc20",
@@ -145,7 +163,7 @@ async function main() {
       });
 
     const newCoinGeckoIds = assetsToAdd.map((item) => {
-      if (item.coinGeckoId !== "") {
+      if (item.coinGeckoId !== "" || !!item.coinGeckoId) {
         return item.coinGeckoId;
       }
     });
