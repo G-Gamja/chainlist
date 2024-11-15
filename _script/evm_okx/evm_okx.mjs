@@ -43,29 +43,29 @@ async function main() {
 
     const activeGeckoCoinsDataResponse = await coingeckoActiveCoinsData.json();
 
-    const pageList = [1, 2, 3, 4];
-    const top1000CoinGeckoIds = (
-      await Promise.all(
-        pageList.map(async (pageIndex) => {
-          try {
-            const response = await fetch(
-              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
-              {
-                headers: {
-                  "x-cg-pro-api-key": coinGeckoApiKey,
-                },
-              }
-            );
+    // const pageList = [1, 2, 3, 4];
+    // const top1000CoinGeckoIds = (
+    //   await Promise.all(
+    //     pageList.map(async (pageIndex) => {
+    //       try {
+    //         const response = await fetch(
+    //           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
+    //           {
+    //             headers: {
+    //               "x-cg-pro-api-key": coinGeckoApiKey,
+    //             },
+    //           }
+    //         );
 
-            const result = await response.json();
+    //         const result = await response.json();
 
-            return result?.map((item) => item.id) || [];
-          } catch (e) {
-            return [];
-          }
-        })
-      )
-    ).flat();
+    //         return result?.map((item) => item.id) || [];
+    //       } catch (e) {
+    //         return [];
+    //       }
+    //     })
+    //   )
+    // ).flat();
 
     const assetPlatformsResponse = await fetch(
       `https://api.coingecko.com/api/v3/asset_platforms`,
@@ -82,7 +82,7 @@ async function main() {
 
     const coingeckoChainKey = assetPlatformsData.find(
       (item) => item.chain_identifier === chainId
-    );
+    ).id;
 
     console.log("🚀 ~ main ~ coingeckoChainKey:", coingeckoChainKey);
 
@@ -144,7 +144,8 @@ async function main() {
               isEqualsIgnoringCase(
                 item.platforms[coingeckoChainKey],
                 asset.tokenContractAddress
-              ) && top1000CoinGeckoIds.includes(item.id)
+              )
+            // && top1000CoinGeckoIds.includes(item.id)
           )?.id || "";
 
         console.log(coinGeckoId);
