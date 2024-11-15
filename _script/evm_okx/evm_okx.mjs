@@ -43,40 +43,47 @@ async function main() {
 
     const activeGeckoCoinsDataResponse = await coingeckoActiveCoinsData.json();
 
-    // const pageList = [1, 2, 3, 4];
-    // const top1000CoinGeckoIds = (
-    //   await Promise.all(
-    //     pageList.map(async (pageIndex) => {
-    //       try {
-    //         const response = await fetch(
-    //           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
-    //           {
-    //             headers: {
-    //               "x-cg-pro-api-key": coinGeckoApiKey,
-    //             },
-    //           }
-    //         );
+    const pageList = [1, 2, 3, 4];
+    const top1000CoinGeckoIds = (
+      await Promise.all(
+        pageList.map(async (pageIndex) => {
+          try {
+            const response = await fetch(
+              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
+              {
+                headers: {
+                  "x-cg-pro-api-key": coinGeckoApiKey,
+                },
+              }
+            );
 
-    //         const result = await response.json();
+            const result = await response.json();
 
-    //         return result?.map((item) => item.id) || [];
-    //       } catch (e) {
-    //         return [];
-    //       }
-    //     })
-    //   )
-    // ).flat();
+            return result?.map((item) => item.id) || [];
+          } catch (e) {
+            return [];
+          }
+        })
+      )
+    ).flat();
 
-    const assetPlatformsResponse = await fetch(
-      `https://api.coingecko.com/api/v3/asset_platforms`,
-      {
-        headers: {
-          "x-cg-pro-api-key": coinGeckoApiKey,
-        },
-      }
-    );
+    // settimeout을 걸어 7초뒤에 요청하도록 수정
 
-    const assetPlatformsData = await assetPlatformsResponse.json();
+    let assetPlatformsData = [];
+    setTimeout(async () => {
+      const assetPlatformsResponse = await fetch(
+        `https://api.coingecko.com/api/v3/asset_platforms`,
+        {
+          headers: {
+            "x-cg-pro-api-key": coinGeckoApiKey,
+          },
+        }
+      );
+
+      const assetPlatformsResponseData = await assetPlatformsResponse.json();
+
+      assetPlatformsData = assetPlatformsResponseData;
+    }, 7000); // 7000밀리초 = 7초
 
     // NOTE chain_identifier only supports EVM chainids
     const coingeckoChainKey = assetPlatformsData.find(
