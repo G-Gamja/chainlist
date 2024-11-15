@@ -76,9 +76,9 @@ async function main() {
       }
     );
 
-    console.log("🚀 ~ main ~ assetPlatformsResponse:", assetPlatformsResponse);
-
     const assetPlatformsData = await assetPlatformsResponse.json();
+
+    console.log("🚀 ~ main ~ assetPlatformsData:", assetPlatformsData);
 
     const coingeckoChainKey = assetPlatformsData.find(
       (item) => item.chain_identifier === chainId
@@ -171,19 +171,15 @@ async function main() {
     });
     console.log("🚀 ~ newCoinGeckoIds ~ newCoinGeckoIds:", newCoinGeckoIds);
 
-    // https://front.api.mintscan.io/v10/utils/market/register
-    // post logic
-
-    // const response = await fetch(
-    //   "https://front.api.mintscan.io/v10/utils/market/register",
-    //   {
-    //     method: "POST", // HTTP 메서드를 POST로 설정
-    //     headers: {
-    //       "x-authorization": "application/json", // 요청 헤더 설정
-    //     },
-    //     body: JSON.stringify({ coingecko_id: ["id1", "id2", "id3"] }), // 요청 본문 설정
-    //   }
-    // );
+    // const response = await fetch('https://front.api.mintscan.io/v10/utils/market/register', {
+    //   method: 'POST', // HTTP 메서드를 POST로 설정
+    //   headers: {
+    //     'x-authorization': 'dmsxhlgkrhtlvek!', // 요청 헤더 설정
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({ coingecko_id: ['sui'] }), // 요청 본문 설정
+    // });
+    // const data = await response.json();
 
     const mergedAssets = [...currentAssets, ...assetsToAdd];
 
