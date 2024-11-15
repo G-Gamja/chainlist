@@ -78,12 +78,13 @@ async function main() {
 
     const assetPlatformsData = await assetPlatformsResponse.json();
 
-    console.log("🚀 ~ main ~ assetPlatformsData:", assetPlatformsData);
-
+    // NOTE chain_identifier only supports EVM chainids
     const coingeckoChainKey = assetPlatformsData.find(
       (item) => item.chain_identifier === chainId
-    ).id;
+    );
 
+    console.log("🚀 ~ main ~ chainId:", chainId);
+    console.log("🚀 ~ main ~ chainId type:", typeof chainId);
     console.log("🚀 ~ main ~ coingeckoChainKey:", coingeckoChainKey);
 
     // const chainListApiNameToCoinGeckoChainNameMaps = {
@@ -97,7 +98,7 @@ async function main() {
     // const coingeckoChainKey = chainListApiNameToCoinGeckoChainNameMaps[chain];
 
     const filteredCoinGeckoIdsByChain = activeGeckoCoinsDataResponse.filter(
-      (item) => !!item.platforms[coingeckoChainKey]
+      (item) => !!item.platforms[coingeckoChainKey.id]
     );
 
     const response = await fetch(
