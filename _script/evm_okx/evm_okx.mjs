@@ -99,12 +99,18 @@ async function main() {
 
           const assetPlatformsResponseData =
             await assetPlatformsResponse.json();
+          console.log(
+            "🚀 ~ setTimeout ~ assetPlatformsResponseData:",
+            assetPlatformsResponseData
+          );
           resolve(assetPlatformsResponseData);
         }, 7000); // 7000밀리초 = 7초
       });
     };
 
     const assetPlatformsData = await fetchAssetPlatformsData();
+
+    console.log("🚀 ~ main ~ assetPlatformsData:", assetPlatformsData);
 
     // NOTE chain_identifier only supports EVM chainids
     const coingeckoChainKey = assetPlatformsData.find(
