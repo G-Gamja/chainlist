@@ -76,6 +76,8 @@ async function main() {
       }
     );
 
+    console.log("🚀 ~ main ~ assetPlatformsResponse:", assetPlatformsResponse);
+
     const assetPlatformsData = await assetPlatformsResponse.json();
 
     const coingeckoChainKey = assetPlatformsData.find(
