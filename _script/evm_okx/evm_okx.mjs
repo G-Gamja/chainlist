@@ -138,8 +138,7 @@ async function main() {
               isEqualsIgnoringCase(
                 item.platforms[coingeckoChainKey],
                 asset.tokenContractAddress
-              )
-            // && top1000CoinGeckoIds.includes(item.id)
+              ) && top1000CoinGeckoIds.includes(item.id)
           )?.id || "";
 
         console.log(coinGeckoId);
