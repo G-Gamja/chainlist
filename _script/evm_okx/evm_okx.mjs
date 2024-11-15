@@ -80,7 +80,7 @@ async function main() {
 
     // NOTE chain_identifier only supports EVM chainids
     const coingeckoChainKey = assetPlatformsData.find(
-      (item) => item.chain_identifier === chainId
+      (item) => String(item.chain_identifier) === String(chainId)
     );
 
     console.log("🚀 ~ main ~ chainId:", chainId);
