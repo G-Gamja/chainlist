@@ -152,11 +152,9 @@ async function main() {
         };
       });
 
-    const newCoinGeckoIds = assetsToAdd.map((item) => {
-      if (item.coinGeckoId !== "" || item.coinGeckoId !== undefined) {
-        return item.coinGeckoId;
-      }
-    });
+    const newCoinGeckoIds = assetsToAdd
+      .filter((item) => !!item.coinGeckoId)
+      .map((item) => item.coinGeckoId);
     console.log("🚀 ~ newCoinGeckoIds ~ newCoinGeckoIds:", newCoinGeckoIds);
 
     // const response = await fetch('https://front.api.mintscan.io/v10/utils/market/register', {
