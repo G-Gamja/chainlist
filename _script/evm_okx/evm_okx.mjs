@@ -59,11 +59,9 @@ async function main() {
 
             const result = await response.json();
 
-            console.log("🚀 ~ pageList.map ~ result:", result);
-
-            return result.map((item) => item.id);
+            return result?.map((item) => item.id) || [];
           } catch (e) {
-            throw e;
+            return [];
           }
         })
       )
