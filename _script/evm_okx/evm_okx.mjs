@@ -52,12 +52,14 @@ async function main() {
               `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
               {
                 headers: {
-                  "x-cg-pro-api-key": "CG-ERj4mPRs3YjeC2vpoMZcZUjt",
+                  "x-cg-pro-api-key": coinGeckoApiKey,
                 },
               }
             );
 
             const result = await response.json();
+
+            console.log("🚀 ~ pageList.map ~ result:", result);
 
             return result.map((item) => item.id);
           } catch (e) {
@@ -66,6 +68,8 @@ async function main() {
         })
       )
     ).flat();
+
+    console.log("🚀 ~ main ~ top1000CoinGeckoIds:", top1000CoinGeckoIds);
 
     const chainListApiNameToCoinGeckoChainNameMaps = {
       ethereum: "ethereum",
