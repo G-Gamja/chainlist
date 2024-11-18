@@ -43,29 +43,29 @@ async function main() {
 
     const activeGeckoCoinsDataResponse = await coingeckoActiveCoinsData.json();
 
-    const pageList = [1, 2, 3, 4];
-    const top1000CoinGeckoIds = (
-      await Promise.all(
-        pageList.map(async (pageIndex) => {
-          try {
-            const response = await fetch(
-              `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
-              {
-                headers: {
-                  "x-cg-pro-api-key": coinGeckoApiKey,
-                },
-              }
-            );
+    // const pageList = [1, 2, 3, 4];
+    // const top1000CoinGeckoIds = (
+    //   await Promise.all(
+    //     pageList.map(async (pageIndex) => {
+    //       try {
+    //         const response = await fetch(
+    //           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
+    //           {
+    //             headers: {
+    //               "x-cg-pro-api-key": coinGeckoApiKey,
+    //             },
+    //           }
+    //         );
 
-            const result = await response.json();
+    //         const result = await response.json();
 
-            return result?.map((item) => item.id) || [];
-          } catch (e) {
-            return [];
-          }
-        })
-      )
-    ).flat();
+    //         return result?.map((item) => item.id) || [];
+    //       } catch (e) {
+    //         return [];
+    //       }
+    //     })
+    //   )
+    // ).flat();
 
     console.log("Intentionally waiting for 31 seconds for avoiding rate limit");
     const fetchAssetPlatformsData = () => {
@@ -84,7 +84,7 @@ async function main() {
             await assetPlatformsResponse.json();
 
           resolve(assetPlatformsResponseData);
-        }, 31000);
+        }, 1000);
       });
     };
 
@@ -143,7 +143,8 @@ async function main() {
               isEqualsIgnoringCase(
                 item.platforms[assetPlatformId],
                 asset.tokenContractAddress
-              ) && top1000CoinGeckoIds.includes(item.id)
+              )
+            // && top1000CoinGeckoIds.includes(item.id)
           )?.id || "";
 
         return {
@@ -167,6 +168,7 @@ async function main() {
 
     console.log("Coin ID List for comparison");
     console.log("🚀 ~ newCoinGeckoIds:", JSON.stringify(newCoinGeckoIds));
+    console.log("🚀 ~ newCoinGeckoIds length:", newCoinGeckoIds.length());
 
     // const response = await fetch('https://front.api.mintscan.io/v10/utils/market/register', {
     //   method: 'POST', // HTTP 메서드를 POST로 설정
