@@ -43,52 +43,16 @@ async function main() {
 
     const activeGeckoCoinsDataResponse = await coingeckoActiveCoinsData.json();
 
-    // const pageList = [1, 2, 3, 4];
-    // const top1000CoinGeckoIds = (
-    //   await Promise.all(
-    //     pageList.map(async (pageIndex) => {
-    //       try {
-    //         const response = await fetch(
-    //           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&per_page=250&page=${pageIndex}`,
-    //           {
-    //             headers: {
-    //               "x-cg-pro-api-key": coinGeckoApiKey,
-    //             },
-    //           }
-    //         );
+    const assetPlatformsResponse = await fetch(
+      `https://api.coingecko.com/api/v3/asset_platforms`,
+      {
+        headers: {
+          "x-cg-pro-api-key": coinGeckoApiKey,
+        },
+      }
+    );
 
-    //         const result = await response.json();
-
-    //         return result?.map((item) => item.id) || [];
-    //       } catch (e) {
-    //         return [];
-    //       }
-    //     })
-    //   )
-    // ).flat();
-
-    console.log("Intentionally waiting for 31 seconds for avoiding rate limit");
-    const fetchAssetPlatformsData = () => {
-      return new Promise((resolve) => {
-        setTimeout(async () => {
-          const assetPlatformsResponse = await fetch(
-            `https://api.coingecko.com/api/v3/asset_platforms`,
-            {
-              headers: {
-                "x-cg-pro-api-key": coinGeckoApiKey,
-              },
-            }
-          );
-
-          const assetPlatformsResponseData =
-            await assetPlatformsResponse.json();
-
-          resolve(assetPlatformsResponseData);
-        }, 1000);
-      });
-    };
-
-    const assetPlatformsData = await fetchAssetPlatformsData();
+    const assetPlatformsData = await assetPlatformsResponse.json();
 
     // NOTE chain_identifier only supports EVM chainids
     const assetPlatformId = assetPlatformsData.find(
@@ -138,13 +102,11 @@ async function main() {
       })
       .map((asset) => {
         const coinGeckoId =
-          filteredCoinGeckoIdsByChain.find(
-            (item) =>
-              isEqualsIgnoringCase(
-                item.platforms[assetPlatformId],
-                asset.tokenContractAddress
-              )
-            // && top1000CoinGeckoIds.includes(item.id)
+          filteredCoinGeckoIdsByChain.find((item) =>
+            isEqualsIgnoringCase(
+              item.platforms[assetPlatformId],
+              asset.tokenContractAddress
+            )
           )?.id || "";
 
         return {
