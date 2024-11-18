@@ -168,7 +168,7 @@ async function main() {
 
     console.log("Coin ID List for comparison");
     console.log("🚀 ~ newCoinGeckoIds:", JSON.stringify(newCoinGeckoIds));
-    console.log("🚀 ~ newCoinGeckoIds length:", newCoinGeckoIds.length());
+    console.log("🚀 ~ newCoinGeckoIds length:", newCoinGeckoIds.length);
 
     // const response = await fetch('https://front.api.mintscan.io/v10/utils/market/register', {
     //   method: 'POST', // HTTP 메서드를 POST로 설정
