@@ -174,7 +174,7 @@ async function main() {
     //     'x-authorization': 'dmsxhlgkrhtlvek!', // 요청 헤더 설정
     //     'Content-Type': 'application/json',
     //   },
-    //   body: JSON.stringify({ coingecko_id: ['sui'] }), // 요청 본문 설정
+    //   body: JSON.stringify({ coingecko_id: newCoinGeckoIds }), // 요청 본문 설정
     // });
     // const data = await response.json();
 
