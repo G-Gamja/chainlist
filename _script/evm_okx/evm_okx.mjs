@@ -94,9 +94,7 @@ async function main() {
           "OK-ACCESS-KEY": apiKey,
           "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
             cryptoJS.HmacSHA256(
-              timestamp +
-                "GET" +
-                `/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+              timestamp + "GET" + `api/v5/dex/aggregator/supported/chain`,
               secretKey
             )
           ),
