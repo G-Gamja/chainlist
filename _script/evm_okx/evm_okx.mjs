@@ -87,6 +87,8 @@ async function main() {
       console.log("🚀 ~ main ~ error:", error);
     });
 
+    console.log("🚀 ~ main ~ response:", response);
+
     const response123 = await fetch(
       `https://www.okx.com/api/v5/dex/aggregator/supported/chain?chainId=43114`,
       {
