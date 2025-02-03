@@ -88,13 +88,15 @@ async function main() {
     });
 
     const response123 = await fetch(
-      `https://www.okx.com/api/v5/dex/aggregator/supported/chain`,
+      `https://www.okx.com/api/v5/dex/aggregator/supported/chain?chainId=43114`,
       {
         headers: {
           "OK-ACCESS-KEY": apiKey,
           "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
             cryptoJS.HmacSHA256(
-              timestamp + "GET" + `api/v5/dex/aggregator/supported/chain`,
+              timestamp +
+                "GET" +
+                `api/v5/dex/aggregator/supported/chain?chainId=43114`,
               secretKey
             )
           ),
@@ -106,8 +108,8 @@ async function main() {
       console.log("🚀 ~ main ~ error:", error);
     });
 
+    console.log("🚀 ~ main ~ jsonResponse123:", response123);
     const jsonResponse123 = await response123.json();
-
     console.log("🚀 ~ main ~ jsonResponse123:", jsonResponse123);
 
     const jsonResponse = await response.json();
