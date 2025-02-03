@@ -87,6 +87,31 @@ async function main() {
       console.log("🚀 ~ main ~ error:", error);
     });
 
+    const response123 = await fetch(
+      `https://www.okx.com/api/v5/dex/aggregator/supported/chain`,
+      {
+        headers: {
+          "OK-ACCESS-KEY": apiKey,
+          "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
+            cryptoJS.HmacSHA256(
+              timestamp +
+                "GET" +
+                `/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+              secretKey
+            )
+          ),
+          "OK-ACCESS-TIMESTAMP": timestamp,
+          "OK-ACCESS-PASSPHRASE": passphrase,
+        },
+      }
+    ).catch((error) => {
+      console.log("🚀 ~ main ~ error:", error);
+    });
+
+    const jsonResponse123 = await response123.json();
+
+    console.log("🚀 ~ main ~ jsonResponse123:", jsonResponse123);
+
     const jsonResponse = await response.json();
 
     const erc20Assets = jsonResponse.data || [];
