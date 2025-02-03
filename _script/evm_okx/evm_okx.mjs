@@ -66,57 +66,60 @@ async function main() {
       (item) => !!item.platforms[assetPlatformId]
     );
 
-    const response = await fetch(
-      `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
-      {
-        headers: {
-          "OK-ACCESS-KEY": apiKey,
-          "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
-            cryptoJS.HmacSHA256(
-              timestamp +
-                "GET" +
-                `/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
-              secretKey
-            )
-          ),
-          "OK-ACCESS-TIMESTAMP": timestamp,
-          "OK-ACCESS-PASSPHRASE": passphrase,
-        },
-      }
-    ).catch((error) => {
-      console.log("🚀 ~ main ~ error:", error);
-    });
+    // const response = await fetch(
+    //   `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+    //   {
+    //     headers: {
+    //       "OK-ACCESS-KEY": apiKey,
+    //       "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
+    //         cryptoJS.HmacSHA256(
+    //           timestamp +
+    //             "GET" +
+    //             `/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+    //           secretKey
+    //         )
+    //       ),
+    //       "OK-ACCESS-TIMESTAMP": timestamp,
+    //       "OK-ACCESS-PASSPHRASE": passphrase,
+    //     },
+    //   }
+    // ).catch((error) => {
+    //   console.log("🚀 ~ main ~ error:", error);
+    // });
 
-    console.log("🚀 ~ main ~ response:", response);
+    const fetchAAA = () => {
+      return new Promise((resolve) => {
+        setTimeout(async () => {
+          const adsfasdfad = await fetch(
+            `https://www.okx.com/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+            {
+              headers: {
+                "OK-ACCESS-KEY": apiKey,
+                "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
+                  cryptoJS.HmacSHA256(
+                    timestamp +
+                      "GET" +
+                      `/api/v5/dex/aggregator/all-tokens?chainId=${chainId}`,
+                    secretKey
+                  )
+                ),
+                "OK-ACCESS-TIMESTAMP": timestamp,
+                "OK-ACCESS-PASSPHRASE": passphrase,
+              },
+            }
+          ).catch((error) => {
+            console.log("🚀 ~ main ~ error:", error);
+          });
 
-    const response123 = await fetch(
-      `https://www.okx.com/api/v5/dex/aggregator/supported/chain?chainId=43114`,
-      {
-        headers: {
-          "OK-ACCESS-KEY": apiKey,
-          "OK-ACCESS-SIGN": cryptoJS.enc.Base64.stringify(
-            cryptoJS.HmacSHA256(
-              timestamp +
-                "GET" +
-                `api/v5/dex/aggregator/supported/chain?chainId=43114`,
-              secretKey
-            )
-          ),
-          "OK-ACCESS-TIMESTAMP": timestamp,
-          "OK-ACCESS-PASSPHRASE": passphrase,
-        },
-      }
-    ).catch((error) => {
-      console.log("🚀 ~ main ~ error:", error);
-    });
+          const asdfasd = await adsfasdfad.json();
+          resolve(asdfasd);
+        }, 31000); // NOTE api콜 수 제한피하기 목적으로 31초 대기
+      });
+    };
 
-    console.log("🚀 ~ main ~ jsonResponse123:", response123);
-    const jsonResponse123 = await response123.json();
-    console.log("🚀 ~ main ~ jsonResponse123:", jsonResponse123);
+    const asdadsdasd = await fetchAAA();
 
-    const jsonResponse = await response.json();
-
-    const erc20Assets = jsonResponse.data || [];
+    const erc20Assets = asdadsdasd.data || [];
 
     console.log("🚀 ~ main ~ erc20Assets:", erc20Assets);
 
