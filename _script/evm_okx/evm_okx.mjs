@@ -91,9 +91,7 @@ async function main() {
 
     const erc20Assets = jsonResponse.data || [];
 
-    if (chain === "arbitrum") {
-      console.log("🚀 ~ main ~ erc20Assets:", erc20Assets);
-    }
+    console.log("🚀 ~ main ~ erc20Assets:", erc20Assets);
 
     const currentAssetContractAddresses = currentAssets.map((asset) => {
       return asset.contract.toLowerCase();
