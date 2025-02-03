@@ -17,7 +17,7 @@ async function main() {
     const secretKey = process.env.OKX_SECRET_KEY;
     const passphrase = process.env.OKX_PASSPHRASE;
     const coinGeckoApiKey = process.env.COINGECKO_API_KEY;
-    const frontApiKey = process.env.FRONT_API_KEY;
+    // const frontApiKey = process.env.FRONT_API_KEY;
 
     const date = new Date();
     const timestamp = date.toISOString();
@@ -83,11 +83,17 @@ async function main() {
           "OK-ACCESS-PASSPHRASE": passphrase,
         },
       }
-    );
+    ).catch((error) => {
+      console.log("🚀 ~ main ~ error:", error);
+    });
 
     const jsonResponse = await response.json();
 
     const erc20Assets = jsonResponse.data || [];
+
+    if (chain === "arbitrum") {
+      console.log("🚀 ~ main ~ erc20Assets:", erc20Assets);
+    }
 
     const currentAssetContractAddresses = currentAssets.map((asset) => {
       return asset.contract.toLowerCase();
@@ -135,18 +141,18 @@ async function main() {
     console.log("🚀 ~ newCoinGeckoIds:", JSON.stringify(newCoinGeckoIds));
     console.log("🚀 ~ newCoinGeckoIds length:", newCoinGeckoIds.length);
 
-    try {
-      await fetch("https://front.api.mintscan.io/v10/utils/market/register", {
-        method: "POST",
-        headers: {
-          "x-authorization": frontApiKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ coingecko_id: newCoinGeckoIds }),
-      });
-    } catch (error) {
-      throw new Error("Front API Error: " + error);
-    }
+    // try {
+    //   await fetch("https://front.api.mintscan.io/v10/utils/market/register", {
+    //     method: "POST",
+    //     headers: {
+    //       "x-authorization": frontApiKey,
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify({ coingecko_id: newCoinGeckoIds }),
+    //   });
+    // } catch (error) {
+    //   throw new Error("Front API Error: " + error);
+    // }
 
     const mergedAssets = [...currentAssets, ...assetsToAdd];
 
